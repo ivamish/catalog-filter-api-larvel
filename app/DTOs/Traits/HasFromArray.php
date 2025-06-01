@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\DTOs;
+namespace App\DTOs\Traits;
 
 use ReflectionClass;
 use ReflectionException;

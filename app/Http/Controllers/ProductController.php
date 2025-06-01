@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\Services\ProductServiceContract;
 use App\Http\Requests\Product\ProductFiltersRequest;
-use Illuminate\Http\Resources\Json\ResourceResponse;
+use Illuminate\Http\JsonResponse;
 use ReflectionException;
 
 class ProductController extends Controller
@@ -18,10 +18,12 @@ class ProductController extends Controller
     /**
      * @throws ReflectionException
      */
-    public function index(ProductFiltersRequest $request) : ResourceResponse
+    public function index(ProductFiltersRequest $request) : JsonResponse
     {
-        $this->productService
-            ->withFilters($request->toDto())
-            ->paginate();
+        return response()->json(
+            $this->productService
+                ->withFilters($request->toDto())
+                ->paginate()
+        );
     }
 }
