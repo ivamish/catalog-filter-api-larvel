@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
+use App\Models\Property;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,11 +15,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $properties = Property::factory()->count(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        Product::factory()->count(100)->create()->each(function ($product) use ($properties) {
+            $product->properties()->attach(
+                $properties->random(rand(1, 3))->pluck('id')->mapWithKeys(function ($propertyId) {
+                    return [$propertyId => ['value' => fake()->word()]];
+                })->toArray()
+            );
+        });
     }
 }
